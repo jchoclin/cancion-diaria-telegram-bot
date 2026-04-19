@@ -7,7 +7,7 @@ async def hello(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.message.reply_text(f'holaa {update.effective_user.first_name}! bienvenide al bot de canciones, si queres saber que puedo hacer, tirá /help')
 
 async def help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    comandos = f"/hola - te saluda\n/hoy - te devulve la canción de hoy\n/ayer - te devuelve la canción de ayer\n/mixsemanal - te da las canciones de la última semana\n/suscribir - te suscribe para que te llegue un mensaje diario con la canción del día\n/desuscribir - te desuscribe para que no te lleguen más los mensajes diarios\n/ayuda - te devuelve este mensaje espantoso"
+    comandos = f"/hola - te saluda\n/hoy - te devulve la canción de hoy\n/ayer - te devuelve la canción de ayer\n/mixsemanal - te da las canciones de la última semana\n/sugerir - te deja mandar una sugerencia de canción al bot\n/suscribir - te suscribe para que te llegue un mensaje diario con la canción del día\n/desuscribir - te desuscribe para que no te lleguen más los mensajes diarios\n/ayuda - te devuelve este mensaje espantoso"
     await update.message.reply_text(comandos)
 
 
@@ -41,6 +41,18 @@ async def week(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             mix += f"- {song[1]} by {song[2]}\n"
         thisweek = f"las canciones de la ultima semana fueron:\n" + mix + f" mira la playlist:"
         await update.message.reply_text(thisweek)
+
+async def suggestasong(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    if not context.args:
+        ejemplo = """ ejemplo de uso:
+  /sugerir  titulo - artista
+"""
+        msg = await update.message.reply_text(ejemplo, quote=False)
+        return
+    user = update.message.from_user
+    msg = f"{user.first_name}(@{user.username}): " +  ' '.join(context.args)
+    await context.bot.send_message(chat_id=context.bot_data["my_chat_id"], text=msg)
+    await update.message.reply_text(f'gracias por la sugerencia! :)')
 
 async def subscribe(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     add_subscriber(update.effective_chat)
