@@ -34,10 +34,10 @@ def get_song_from_date(date):
         song = cursor.fetchone()
         return song
     
-def get_weeks_songs(today, week):
+def get_weeks_songs(sunday, saturday):
      with sqlite3.connect('songs.db') as connection:
         cursor = connection.cursor()
-        cursor.execute("SELECT * FROM daily_songs WHERE sent_date >= ? AND sent_date <= ?", (week.strftime('%Y-%m-%d'), today.strftime('%Y-%m-%d'),))
+        cursor.execute("SELECT * FROM daily_songs WHERE sent_date >= ? AND sent_date <= ?", (saturday.strftime('%Y-%m-%d'), sunday.strftime('%Y-%m-%d'),))
         songs = cursor.fetchall()
         return songs
 

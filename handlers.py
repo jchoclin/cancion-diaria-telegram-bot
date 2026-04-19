@@ -34,7 +34,7 @@ async def week(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     sunday = saturday - timedelta(days=6)
     songs = get_weeks_songs(sunday, saturday)
     if not songs:
-        await update.message.reply_text(f'no hay canciones esta semana')
+        await update.message.reply_text(f'no hay canciones de la semana pasada')
     else:
         mix = ""
         for song in songs:
