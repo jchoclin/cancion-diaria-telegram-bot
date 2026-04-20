@@ -4,7 +4,7 @@ from telegram import Update
 from telegram.ext import ContextTypes
 
 async def hello(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    await update.message.reply_text(f'holaa {update.effective_user.first_name}! bienvenide al bot de canciones, si queres saber que puedo hacer, tirá /help')
+    await update.message.reply_text(f'holaa {update.effective_user.first_name}! bienvenide al bot de canciones, si queres saber que puedo hacer, tirá /ayuda')
 
 async def help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     comandos = f"/hola - te saluda\n/hoy - te devulve la canción de hoy\n/ayer - te devuelve la canción de ayer\n/mixsemanal - te da las canciones de la última semana\n/sugerir - te deja mandar una sugerencia de canción al bot\n/suscribir - te suscribe para que te llegue un mensaje diario con la canción del día\n/desuscribir - te desuscribe para que no te lleguen más los mensajes diarios\n/ayuda - te devuelve este mensaje espantoso"
@@ -38,8 +38,8 @@ async def week(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     else:
         mix = ""
         for song in songs:
-            mix += f"- {song[1]} by {song[2]}\n"
-        thisweek = f"las canciones de la ultima semana fueron:\n" + mix + f" mira la playlist:"
+            mix += f"- {song[1]} by {song[2]} ({song[3]})\n"
+        thisweek = f"las canciones de la ultima semana fueron:\n" + mix 
         await update.message.reply_text(thisweek)
 
 async def suggestasong(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
