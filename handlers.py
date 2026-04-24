@@ -4,7 +4,7 @@ from telegram import Update
 from telegram.ext import ContextTypes
 
 async def hello(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    await update.message.reply_text(f'holaa {update.effective_user.first_name}! bienvenide al bot de canciones, si queres saber que puedo hacer, tirá /ayuda')
+    await update.message.reply_text(f'holaa {update.effective_user.first_name}! bienvenide al bot de canciones, si queres saber que puedo hacer, tirá /ayuda (y para suscribirte tira /suscribir)')
 
 async def help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     comandos = f"/hola - te saluda\n/hoy - te devulve la canción de hoy\n/ayer - te devuelve la canción de ayer\n/mixsemanal - te da las canciones de la última semana\n/sugerir - te deja mandar una sugerencia de canción al bot\n/suscribir - te suscribe para que te llegue un mensaje diario con la canción del día\n/desuscribir - te desuscribe para que no te lleguen más los mensajes diarios\n/ayuda - te devuelve este mensaje espantoso"
@@ -62,7 +62,7 @@ async def unsubscribe(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     to_unsubscribe(update.effective_chat)
     await update.message.reply_text(f'ya te desuscribiste! :(')
 
-async def send(bot) -> None:
+async def sendsong(bot) -> None:
     todays_song = get_song_from_date(datetime.today())
     subscribers = get_subscribers()
     for sub in subscribers:
@@ -71,3 +71,22 @@ async def send(bot) -> None:
         else:
             song = f"la canción de hoy es {todays_song[1]} de {todays_song[2]}, escuchala acá: {todays_song[3]}"
             await bot.send_message(chat_id=sub[0],text=song)
+
+async def sendweek(bot) -> None:
+    today = datetime.today()
+    saturday = today - timedelta(days=(today.weekday() - 5) % 7)
+    sunday = saturday - timedelta(days=6)
+    songs = get_weeks_songs(sunday, saturday)
+    subscribers = get_subscribers()
+    for sub in subscribers:
+        if not songs:
+            await bot.send_message(chat_id=sub[0], text=f'no hay canciones de la semana pasada')
+        else:
+            mix = ""
+            for song in songs:
+                mix += f"- {song[1]} by {song[2]} ({song[3]})\n"
+            thisweek = f"las canciones de la ultima semana fueron:\n" + mix 
+            await bot.send_message(chat_id=sub[0],text=thisweek)
+            
+async def alive(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    await update.message.reply_text(f'si, estoy vivooo :)')

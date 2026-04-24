@@ -2,7 +2,7 @@ from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 #import pandas as pd
 from dotenv import load_dotenv
-from handlers import today, yesterday, subscribe, unsubscribe, hello, week, send, help, suggestasong
+from handlers import today, yesterday, subscribe, unsubscribe, hello, week, sendsong, help, suggestasong, alive, sendweek
 from scheduler import schedule
 from database import create_tables, insert_songs_from_google_sheet
 import os
@@ -11,7 +11,7 @@ load_dotenv()
 
 async def post_init(app):
     insert_songs_from_google_sheet(os.getenv("GOOGLE_SHEET_URL"))
-    schedule(insert_songs_from_google_sheet, send, os.getenv("GOOGLE_SHEET_URL"), "America/Argentina/Buenos_Aires", app.bot)
+    schedule(insert_songs_from_google_sheet, sendsong, sendweek, os.getenv("GOOGLE_SHEET_URL"), "America/Argentina/Buenos_Aires", app.bot)
 
 def main(): 
     create_tables()
@@ -26,6 +26,7 @@ def main():
     app.add_handler(CommandHandler("mixsemanal", week))
     app.add_handler(CommandHandler("suscribir", subscribe))
     app.add_handler(CommandHandler("desuscribir", unsubscribe))
+    app.add_handler(CommandHandler("estoyvivo", alive))
                     
     app.run_polling()
 
