@@ -38,7 +38,7 @@ async def week(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     else:
         mix = ""
         for song in songs:
-            mix += f"- {song[1]} by {song[2]} ({song[3]})\n"
+            mix += f"- {song[1]} de {song[2]} ({song[3]})\n"
         thisweek = f"las canciones de la ultima semana fueron:\n" + mix 
         await update.message.reply_text(thisweek)
 
@@ -84,7 +84,7 @@ async def sendweek(bot) -> None:
         else:
             mix = ""
             for song in songs:
-                mix += f"- {song[1]} by {song[2]} ({song[3]})\n"
+                mix += f"- {song[1]} de {song[2]} ({song[3]})\n"
             thisweek = f"las canciones de la ultima semana fueron:\n" + mix 
             await bot.send_message(chat_id=sub[0],text=thisweek)
             
