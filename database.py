@@ -5,13 +5,14 @@ import requests
 def create_tables():
     with sqlite3.connect('songs.db') as connection:
         cursor = connection.cursor()
-        cursor.execute("CREATE TABLE IF NOT EXISTS daily_songs(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, artist TEXT, url TEXT, sent_date TEXT)")
+        cursor.execute("CREATE TABLE IF NOT EXISTS daily_songs(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, artist TEXT, url TEXT, sent_date TEXT UNIQUE)")
         cursor.execute("CREATE TABLE IF NOT EXISTS subscribers(chat_id INTEGER PRIMARY KEY, active INTEGER)")
         connection.commit()
 
 def insert_songs_from_google_sheet(path):
     try:
         res = requests.get(path)
+        res.encoding = 'utf-8'
         res.raise_for_status()
     except requests.RequestException as e: 
         print(f"Error fetching songs: {e}")
@@ -37,7 +38,7 @@ def get_song_from_date(date):
 def get_weeks_songs(sunday, saturday):
      with sqlite3.connect('songs.db') as connection:
         cursor = connection.cursor()
-        cursor.execute("SELECT * FROM daily_songs WHERE sent_date >= ? AND sent_date <= ?", (saturday.strftime('%Y-%m-%d'), sunday.strftime('%Y-%m-%d'),))
+        cursor.execute("SELECT * FROM daily_songs WHERE sent_date >= ? AND sent_date <= ?", (sunday.strftime('%Y-%m-%d'), saturday.strftime('%Y-%m-%d'),))
         songs = cursor.fetchall()
         return songs
 
