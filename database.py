@@ -5,7 +5,7 @@ import requests
 def create_tables():
     with sqlite3.connect('songs.db') as connection:
         cursor = connection.cursor()
-        cursor.execute("CREATE TABLE IF NOT EXISTS daily_songs(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, artist TEXT, url TEXT, sent_date TEXT UNIQUE)")
+        cursor.execute("CREATE TABLE IF NOT EXISTS daily_songs(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, artist TEXT, urlyoutube TEXT, urlspotify TEXT, sent_date TEXT UNIQUE)")
         cursor.execute("CREATE TABLE IF NOT EXISTS subscribers(chat_id INTEGER PRIMARY KEY, active INTEGER)")
         connection.commit()
 
@@ -23,7 +23,7 @@ def insert_songs_from_google_sheet(path):
             reader = csv.reader(res.text.splitlines())   
             next(reader)
             for row in reader:
-                cursor.execute("INSERT OR IGNORE INTO daily_songs (title, artist, url, sent_date) VALUES (?, ?, ?, ?)", (row[0], row[1], row[2], row[3],))
+                cursor.execute("INSERT OR IGNORE INTO daily_songs (title, artist, urlyoutube, urlspotify, sent_date) VALUES (?, ?, ?, ?, ?)", (row[0], row[1], row[2], row[3], row[4],))
             connection.commit()   
     except sqlite3.Error as e:
         print(f"Error inserting into database: {e}")

@@ -16,8 +16,8 @@ async def today(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if todays_song is None:
         await update.message.reply_text(f'no hay canción hoy! volvé mañana :)')
     else:
-        song = f"la canción de hoy es {todays_song[1]} de {todays_song[2]}, escuchala acá: {todays_song[3]}"
-        await update.message.reply_text(song)
+        song = f"la canción de hoy es {todays_song[1]} de {todays_song[2]}, escuchala acá: " + f'<a href="{todays_song[3]}">YouTube</a>' + " | " + f'<a href="{todays_song[4]}">Spotify</a>'
+        await update.message.reply_text(song, parse_mode='HTML')
 
 async def yesterday(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         yesterday = datetime.today() - timedelta(days=1)
@@ -25,8 +25,8 @@ async def yesterday(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         if yesterdays_song is None:
             await update.message.reply_text(f'no encontré la canción de ayer :(')
         else:
-            song = f"la canción de ayer fue {yesterdays_song[1]} de {yesterdays_song[2]}, escuchala acá: {yesterdays_song[3]}"
-            await update.message.reply_text(song)
+            song = f"la canción de ayer fue {yesterdays_song[1]} de {yesterdays_song[2]}, escuchala acá: "+ f'<a href="{yesterdays_song[3]}">YouTube</a>'  + " | " + f'<a href="{yesterdays_song[4]}">Spotify</a>'
+            await update.message.reply_text(song, parse_mode='HTML')
 
 async def week(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     today = datetime.today()
@@ -38,9 +38,9 @@ async def week(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     else:
         mix = ""
         for song in songs:
-            mix += f"- {song[1]} de {song[2]} ({song[3]})\n"
+            mix += f"- {song[1]} de {song[2]} (" + f'<a href="{song[3]}">YouTube</a>' + " | " + f'<a href="{song[4]}">Spotify</a>' + ")\n"
         thisweek = f"las canciones de la ultima semana fueron:\n" + mix 
-        await update.message.reply_text(thisweek)
+        await update.message.reply_text(thisweek, parse_mode='HTML')
 
 async def suggestasong(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if not context.args:
@@ -69,7 +69,7 @@ async def sendsong(bot) -> None:
         if todays_song is None:
             await bot.send_message(chat_id=sub[0], text=f'no hay canción hoy! volvé mañana :)')
         else:
-            song = f"la canción de hoy es {todays_song[1]} de {todays_song[2]}, escuchala acá: {todays_song[3]}"
+            song = f"la canción de hoy es {todays_song[1]} de {todays_song[2]}, escuchala acá: " + f'<a href="{todays_song[3]}">YouTube</a>' + " | " + f'<a href="{todays_song[4]}">Spotify</a>'
             await bot.send_message(chat_id=sub[0],text=song)
 
 async def sendweek(bot) -> None:
@@ -84,7 +84,7 @@ async def sendweek(bot) -> None:
         else:
             mix = ""
             for song in songs:
-                mix += f"- {song[1]} de {song[2]} ({song[3]})\n"
+                mix += f"- {song[1]} de {song[2]} (" + f'<a href="{song[3]}">YouTube</a>' + " | " + f'<a href="{song[4]}">Spotify</a>' + ")\n"
             thisweek = f"las canciones de la ultima semana fueron:\n" + mix 
             await bot.send_message(chat_id=sub[0],text=thisweek)
             
