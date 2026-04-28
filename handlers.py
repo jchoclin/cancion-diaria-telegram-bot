@@ -70,7 +70,7 @@ async def sendsong(bot) -> None:
             await bot.send_message(chat_id=sub[0], text=f'no hay canción hoy! volvé mañana :)')
         else:
             song = f"la canción de hoy es {todays_song[1]} de {todays_song[2]}, escuchala acá: " + f'<a href="{todays_song[3]}">YouTube</a>' + " | " + f'<a href="{todays_song[4]}">Spotify</a>'
-            await bot.send_message(chat_id=sub[0],text=song)
+            await bot.send_message(chat_id=sub[0],text=song, parse_mode='HTML')
 
 async def sendweek(bot) -> None:
     today = datetime.today()
@@ -86,7 +86,7 @@ async def sendweek(bot) -> None:
             for song in songs:
                 mix += f"- {song[1]} de {song[2]} (" + f'<a href="{song[3]}">YouTube</a>' + " | " + f'<a href="{song[4]}">Spotify</a>' + ")\n"
             thisweek = f"las canciones de la ultima semana fueron:\n" + mix 
-            await bot.send_message(chat_id=sub[0],text=thisweek)
+            await bot.send_message(chat_id=sub[0],text=thisweek, parse_mode='HTML')
             
 async def alive(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.message.reply_text(f'si, estoy vivooo :)')
